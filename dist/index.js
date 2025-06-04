@@ -6,7 +6,7 @@ export default function buildCheckPlugin() {
             const injectScript = `
         <script>
           const BUILD_CHECK = "${buildCheck}";
-          fetch('/check.json', { cache: 'no-store' })
+          fetch('./check.json', { cache: 'no-store' })
             .then(res => res.json())
             .then(data => {
               if (data.check && data.check !== BUILD_CHECK) {
