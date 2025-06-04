@@ -1,6 +1,6 @@
 import type { Plugin } from 'vite';
 interface BuildCheckPluginOptions {
-    appName?: string;
+    contextPath?: string;
 }
 export default function buildCheckPlugin(options?: BuildCheckPluginOptions): Plugin;
 export {};
