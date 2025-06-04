@@ -21,6 +21,12 @@ export default function buildCheckPlugin (options: BuildCheckPluginOptions = {})
               if (data.check && data.check === BUILD_CHECK) {
                 return
               }
+              window.addEventListener('message', (event) => {
+                if (event.origin && (event.data.name !== 'PwaReloadToSkeletor' || event.data.trigger !== 'reload' || event.data.contextPath !== '${options.contextPath}')) {
+                  return
+                }
+                location.reload(true);
+              })
               navigator.serviceWorker.getRegistrations().then(
                 (registrations) => {
                   const ws = registrations.map(r => {
@@ -28,19 +34,12 @@ export default function buildCheckPlugin (options: BuildCheckPluginOptions = {})
                       return null
                     }
                     window.parent.postMessage({ name: 'PwaReloadToSkeletor', trigger: 'failCheck', contextPath: '${options.contextPath}'})
-                    return r
+                    return r.unregister()
                   })
-                  return Promise.all(ws)
+                  return Promise.all(ws.filter(el=>el!=null))
                 },
                 (err) => {
                   throw err
-                }
-              ).then(
-                (resp) => {
-                  location.reload(true);
-                },
-                (err) => {
-                  reject(contextPath, err)
                 }
               )
             })
