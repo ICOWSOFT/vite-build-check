@@ -19,11 +19,21 @@ export default function buildCheckPlugin (options: BuildCheckPluginOptions = {})
             .then(res => res.json())
             .then(data => {
               if (data.check && data.check !== BUILD_CHECK) {
-                navigator.serviceWorker.getRegistrations().then(
-                  (registrations) => {
-                    console.log(registrations.length)
-                    registrations.map(r => console.log(r.scope))
-                  })
+                if ('serviceWorker' in navigator) {
+  if (navigator.serviceWorker.controller) {
+    console.log('SW actif pour cette iframe :', navigator.serviceWorker.controller.scriptURL);
+  } else {
+    console.warn('Pas de SW actif pour cette iframe.');
+  }
+
+  navigator.serviceWorker.getRegistration().then((registration) => {
+    if (registration) {
+      console.log('SW enregistré sur ce scope :', registration.scope);
+    } else {
+      console.warn('Aucun SW enregistré pour ce scope.');
+    }
+  });
+}
                 window.parent.postMessage({ name: 'PwaReloadToSkeletor', trigger: 'failCheck', contextPath: '${options.contextPath}'})
               }
             })
