@@ -2,9 +2,12 @@ import type { Plugin } from 'vite';
 import { writeFileSync } from 'fs';
 import { join } from 'path';
 
-export default function buildCheckPlugin (): Plugin {
+interface BuildCheckPluginOptions {
+  appName?: string
+}
+
+export default function buildCheckPlugin (options: BuildCheckPluginOptions = {}): Plugin {
   const buildCheck = new Date().toISOString();
-  console.log(process.env)
   return {
     name: 'vite-plugin-build-check',
 
@@ -16,7 +19,7 @@ export default function buildCheckPlugin (): Plugin {
             .then(res => res.json())
             .then(data => {
               if (data.check && data.check !== BUILD_CHECK) {
-                window.parent.postMessage({ name: 'PwaReloadToSkeletor', trigger: 'failCheck', app: ${process.env.APP_NAME}})
+                window.parent.postMessage({ name: 'PwaReloadToSkeletor', trigger: 'failCheck', app: ${options.appName}})
               }
             })
             .catch(console.error);
