@@ -11,26 +11,33 @@ export default function buildCheckPlugin(options = {}) {
           fetch('./check.json', { cache: 'no-store' })
             .then(res => res.json())
             .then(data => {
-              if (data.check && data.check !== BUILD_CHECK) {
-                if ('serviceWorker' in navigator) {
-  if (navigator.serviceWorker.controller) {
-    console.log('SW actif pour cette iframe :', navigator.serviceWorker.controller.scriptURL);
-  } else {
-    console.warn('Pas de SW actif pour cette iframe.');
-  }
-
-  navigator.serviceWorker.getRegistration().then((registration) => {
-    if (registration) {
-      console.log('SW enregistré sur ce scope :', registration.scope);
-    } else {
-      console.warn('Aucun SW enregistré pour ce scope.');
-    }
-  });
-}
-                window.parent.postMessage({ name: 'PwaReloadToSkeletor', trigger: 'failCheck', contextPath: '${options.contextPath}'})
+              if (data.check && data.check === BUILD_CHECK) {
+                return
               }
+              navigator.serviceWorker.getRegistrations().then(
+                (registrations) => {
+                  const ws = registrations.map(r => {
+                    if (!r.scope.includes('/' + ${options.contextPath} + '/')) {
+                      return null
+                    }
+                    window.parent.postMessage({ name: 'PwaReloadToSkeletor', trigger: 'failCheck', contextPath: '${options.contextPath}'})
+                    return r
+                  })
+                  return Promise.all(ws)
+                },
+                (err) => {
+                  throw err
+                }
+              ).then(
+                (resp) => {
+                  location.reload(true);
+                },
+                (err) => {
+                  reject(contextPath, err)
+                }
+              )
             })
-            .catch(console.error);
+          .catch(console.error);
         </script>
       `;
             return html.replace('</head>', `${injectScript}</head>`);
