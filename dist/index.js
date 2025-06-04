@@ -2,6 +2,7 @@ import { writeFileSync } from 'fs';
 import { join } from 'path';
 export default function buildCheckPlugin() {
     const buildCheck = new Date().toISOString();
+    console.log(process.env);
     return {
         name: 'vite-plugin-build-check',
         transformIndexHtml(html) {

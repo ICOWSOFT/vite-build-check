@@ -4,7 +4,7 @@ import { join } from 'path';
 
 export default function buildCheckPlugin (): Plugin {
   const buildCheck = new Date().toISOString();
-
+  console.log(process.env)
   return {
     name: 'vite-plugin-build-check',
 
