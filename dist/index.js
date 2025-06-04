@@ -14,18 +14,21 @@ export default function buildCheckPlugin(options = {}) {
               if (data.check && data.check === BUILD_CHECK) {
                 return
               }
+              // Event de retour pour reload
               window.addEventListener('message', (event) => {
                 if (event.origin && (event.data.name !== 'PwaReloadToSkeletor' || event.data.trigger !== 'reload' || event.data.contextPath !== '${options.contextPath}')) {
                   return
                 }
                 location.reload(true);
               })
+              // Récup du SW to unregister
               navigator.serviceWorker.getRegistrations().then(
                 (registrations) => {
                   const ws = registrations.map(r => {
                     if (!r.scope.includes('/${options.contextPath}/')) {
                       return null
                     }
+                    // Sending msg popur display wait box
                     window.parent.postMessage({ name: 'PwaReloadToSkeletor', trigger: 'failCheck', contextPath: '${options.contextPath}'})
                     return r.unregister()
                   })
