@@ -1,4 +1,6 @@
 import type { Plugin } from 'vite';
+import { writeFileSync } from 'fs';
+import { join } from 'path';
 
 export default function buildCheckPlugin (): Plugin {
   const buildCheck = process.env.BUILD_CHECK || new Date().toISOString();
@@ -22,13 +24,10 @@ export default function buildCheckPlugin (): Plugin {
       `;
       return html.replace('</head>', `${injectScript}</head>`);
     },
-
-    generateBundle () {
-      this.emitFile({
-        type: 'asset',
-        fileName: 'check.json',
-        source: JSON.stringify({ check: buildCheck })
-      });
+    configResolved (config) {
+      // Génère dans public/
+      const publicPath = join(config.root, 'public', 'check.json');
+      writeFileSync(publicPath, JSON.stringify({ check: buildCheck }, null, 2));
     }
-  };
+  }
 }
