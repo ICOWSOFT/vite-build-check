@@ -12,7 +12,7 @@ export default function buildCheckPlugin() {
             .then(res => res.json())
             .then(data => {
               if (data.check && data.check !== BUILD_CHECK) {
-                window.parent.postMessage({ name: 'PwaReloadToSkeletor', trigger: 'failCheck', app: process.env.APP_NAME })
+                window.parent.postMessage({ name: 'PwaReloadToSkeletor', trigger: 'failCheck', app: ${process.env.APP_NAME}})
               }
             })
             .catch(console.error);
