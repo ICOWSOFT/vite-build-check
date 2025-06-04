@@ -19,7 +19,7 @@ export default function buildCheckPlugin (options: BuildCheckPluginOptions = {})
             .then(res => res.json())
             .then(data => {
               if (data.check && data.check !== BUILD_CHECK) {
-                window.parent.postMessage({ name: 'PwaReloadToSkeletor', trigger: 'failCheck', app: ${options.appName}})
+                window.parent.postMessage({ name: 'PwaReloadToSkeletor', trigger: 'failCheck', app: '${options.appName}'})
               }
             })
             .catch(console.error);
