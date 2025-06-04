@@ -24,7 +24,7 @@ export default function buildCheckPlugin (options: BuildCheckPluginOptions = {})
               navigator.serviceWorker.getRegistrations().then(
                 (registrations) => {
                   const ws = registrations.map(r => {
-                    if (!r.scope.includes('/' + ${options.contextPath} + '/')) {
+                    if (!r.scope.includes('/${options.contextPath}/')) {
                       return null
                     }
                     window.parent.postMessage({ name: 'PwaReloadToSkeletor', trigger: 'failCheck', contextPath: '${options.contextPath}'})
