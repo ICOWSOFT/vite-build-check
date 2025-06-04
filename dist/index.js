@@ -1,7 +1,7 @@
 import { writeFileSync } from 'fs';
 import { join } from 'path';
 export default function buildCheckPlugin() {
-    const buildCheck = process.env.BUILD_CHECK || new Date().toISOString();
+    const buildCheck = new Date().toISOString();
     return {
         name: 'vite-plugin-build-check',
         transformIndexHtml(html) {
@@ -12,7 +12,7 @@ export default function buildCheckPlugin() {
             .then(res => res.json())
             .then(data => {
               if (data.check && data.check !== BUILD_CHECK) {
-                location.reload(true);
+                window.parent.postMessage({ name: 'icsPwaReload', trigger: 'failCheck', app: process.env.APP_NAME })
               }
             })
             .catch(console.error);
