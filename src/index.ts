@@ -32,7 +32,7 @@ export default function buildCheckPlugin (options: BuildCheckPluginOptions = {})
               navigator.serviceWorker.getRegistrations().then(
                 (registrations) => {
                   const ws = registrations.map(r => {
-                    if (!r.scope.includes('/${options.contextPath}/')) {
+                    if (!r.scope.includes('${options.contextPath}/')) {
                       return null
                     }
                     // Sending msg popur display wait box
