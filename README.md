@@ -18,6 +18,18 @@ import buildCheckPlugin from 'vite-build-check'
 ​[buildCheckPlugin()],
 ```
 
+* `quasar.config.js` : pwa : After `cfg.runtimeCaching = cfg.runtimeCaching || []`
+
+```js
+        cfg.runtimeCaching.push({
+          urlPattern: /\/check\.json$/,
+          handler: 'NetworkOnly',
+          options: {
+            cacheName: 'no-cache-check'
+          }
+        })
+```
+
 ## Dev / Build
 
 If any change in the code, please build, then push (I know, it's not conventional)...
