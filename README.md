@@ -11,11 +11,22 @@ Generate and inject a marker(timestamp) at build time, then check marker at runt
 ```js
 import buildCheckPlugin from 'vite-build-check'
 ```
+* `quasar.config.js` : After `export`
+  
+```js
+  const candidate = (!ctx.dev && process.env.ICS_CANDIDATE) ? '-candidate' : ''
+  const contextPath = '/' + require('./package.json').config.devServer.contextPath + candidate
+```
 
+* `quasar.config.js` : build
+
+```js
+        publicPath:contextPath,
+```
 * `quasar.config.js` : vitePlugins
 
 ```js
-​[buildCheckPlugin()],
+[buildCheckPlugin({contextPath })],
 ```
 
 * `quasar.config.js` : pwa : After `cfg.runtimeCaching = cfg.runtimeCaching || []`
