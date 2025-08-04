@@ -29,9 +29,11 @@ import buildCheckPlugin from 'vite-build-check'
 [buildCheckPlugin({contextPath })],
 ```
 
-* `quasar.config.js` : pwa : After `cfg.runtimeCaching = cfg.runtimeCaching || []`
+* `quasar.config.js` : `pwa > extendGenerateSWOptions ` : 
 
 ```js
+        cfg.runtimeCaching = cfg.runtimeCaching || []
+
         cfg.runtimeCaching.push({
           urlPattern: /\/check\.json$/,
           handler: 'NetworkOnly',
