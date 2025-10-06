@@ -14,10 +14,11 @@
     "build": "tsc"
   },
   "peerDependencies": {
-    "vite": "^5.0.0"
+    "vite": "^7.1.9"
   },
   "devDependencies": {
     "vite": "^7.1.1",
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.2",
+    "@types/node": "^24.7.0"
   }
 }
