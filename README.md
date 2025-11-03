@@ -51,3 +51,10 @@ To build :
 ```bash
 npx tsc
 ```
+
+## Upgrade dep
+
+``` 
+npx npm-check-updates -u
+npm install
+```
