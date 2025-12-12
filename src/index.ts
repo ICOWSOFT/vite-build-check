@@ -3,7 +3,8 @@ import { writeFileSync } from 'fs';
 import { join } from 'path';
 
 interface BuildCheckPluginOptions {
-  contextPath?: string
+  contextPath?: string,
+  appName?: string,
 }
 
 export default function buildCheckPlugin(options: BuildCheckPluginOptions = {}): Plugin {
@@ -39,7 +40,7 @@ fetch('./check.json', { cache: 'no-store' })
           return r.update()
         })
         const toUpdates = ws.filter(el => el != null)
-        window.parent.postMessage({ name: 'PwaReloadToSkeletor', trigger: 'failCheck', contextPath: '${options.contextPath}' })
+        window.parent.postMessage({ name: 'PwaReloadToSkeletor', trigger: 'failCheck', contextPath: '${options.contextPath}', appName: '${options.appName}'})
         return Promise.all(toUpdates)
       },
       (err) => {

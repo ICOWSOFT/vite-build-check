@@ -32,7 +32,7 @@ fetch('./check.json', { cache: 'no-store' })
           return r.update()
         })
         const toUpdates = ws.filter(el => el != null)
-        window.parent.postMessage({ name: 'PwaReloadToSkeletor', trigger: 'failCheck', contextPath: '${options.contextPath}' })
+        window.parent.postMessage({ name: 'PwaReloadToSkeletor', trigger: 'failCheck', contextPath: '${options.contextPath}', appName: '${options.appName}'})
         return Promise.all(toUpdates)
       },
       (err) => {
