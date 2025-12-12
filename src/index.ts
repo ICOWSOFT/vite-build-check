@@ -6,12 +6,12 @@ interface BuildCheckPluginOptions {
   contextPath?: string
 }
 
-export default function buildCheckPlugin (options: BuildCheckPluginOptions = {}): Plugin {
+export default function buildCheckPlugin(options: BuildCheckPluginOptions = {}): Plugin {
   const buildCheck = new Date().toISOString();
   return {
     name: 'vite-plugin-build-check',
 
-    transformIndexHtml (html) {
+    transformIndexHtml(html) {
       const injectScript = `
         <script>
           const BUILD_CHECK = "${buildCheck}";
@@ -36,22 +36,31 @@ export default function buildCheckPlugin (options: BuildCheckPluginOptions = {})
                       return null
                     }
                     // Sending msg popur display wait box
-                    window.parent.postMessage({ name: 'PwaReloadToSkeletor', trigger: 'failCheck', contextPath: '${options.contextPath}'})
-                    return r.unregister()
+                    // window.parent.postMessage({ name: 'PwaReloadToSkeletor', trigger: 'failCheck', contextPath: '${options.contextPath}'})
+                    return r.update()
                   })
+                  // 4. Écouter le changement de contrôleur
+                  navigator.serviceWorker.addEventListener('controllerchange', () => {
+                  console.log('Reloading')
+                    window.location.reload(); // Recharge la page quand le nouveau SW est actif
+                  });
                   return Promise.all(ws.filter(el=>el!=null))
                 },
                 (err) => {
                   throw err
                 }
               )
+            .then ((resp) => {
+              console.log('Reloading done')
+            }, (err) => {
+              console.error('Reloading error', error)
             })
           .catch(console.error);
         </script>
       `;
       return html.replace('</head>', `${injectScript}</head>`);
     },
-    configResolved (config) {
+    configResolved(config) {
       // Génère dans public/
       const publicPath = join(config.root, 'public', 'check.json');
       writeFileSync(publicPath, JSON.stringify({ check: buildCheck }, null, 2));
