@@ -12,12 +12,6 @@ fetch('./check.json', { cache: 'no-store' })
       }
       location.reload(true);
     })
-    navigator.serviceWorker.addEventListener('controllerchange', () => {
-      console.log('Reloading')
-      window.location.reload()
-    },
-      { once: true }
-    )
     // Récup du SW to unregister
     navigator.serviceWorker.getRegistrations().then(
       (registrations) => {
@@ -26,30 +20,17 @@ fetch('./check.json', { cache: 'no-store' })
             return null
           }
           // Sending msg popur display wait box
-          // window.parent.postMessage({ name: 'PwaReloadToSkeletor', trigger: 'failCheck', contextPath: '${options.contextPath}'})
           return r.update()
         })
-        // 4. Écouter le changement de contrôleur
-        navigator.serviceWorker.addEventListener('controllerchange', () => {
-          console.log('Reloading')
-          window.location.reload(); // Recharge la page quand le nouveau SW est actif
-        });
-        return Promise.all(ws.filter(el => el != null))
+        const toUpdates = ws.filter(el => el != null)
+        window.parent.postMessage({ name: 'PwaReloadToSkeletor', trigger: 'failCheck', contextPath: '${options.contextPath}' })
+        return Promise.all(toUpdates)
       },
       (err) => {
         throw err
       }
-    )
-      .then((resp) => {
-        // forcer l'activation si une version est déjà prête
-        navigator.serviceWorker.getRegistration(scopeNeedle).then((reg) => {
-          if (reg && reg.waiting) {
-            reg.waiting.postMessage({ type: 'SKIP_WAITING' })
-          }
-        })
-        console.log('Reloading done')
-      }, (err) => {
-        console.error('Reloading error', error)
-      })
+    ).then(() => {
+      console.log('UPDATED')
+    })
   })
   .catch(console.error);
