@@ -21,6 +21,12 @@ fetch('./check.json', { cache: 'no-store' })
       }
       location.reload(true);
     })
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+      console.log('Reloading')
+      window.location.reload()
+    },
+      { once: true }
+    )
     // Récup du SW to unregister
     navigator.serviceWorker.getRegistrations().then(
       (registrations) => {
@@ -44,6 +50,12 @@ fetch('./check.json', { cache: 'no-store' })
       }
     )
       .then((resp) => {
+        // forcer l'activation si une version est déjà prête
+        navigator.serviceWorker.getRegistration(scopeNeedle).then((reg) => {
+          if (reg && reg.waiting) {
+            reg.waiting.postMessage({ type: 'SKIP_WAITING' })
+          }
+        })
         console.log('Reloading done')
       }, (err) => {
         console.error('Reloading error', error)
