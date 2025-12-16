@@ -1,6 +1,6 @@
 {
   "name": "@icowsoft/vite-build-check",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Generate a check.json file to check if the build is up to date",
   "author": "Icowsoft",
   "license": "UNLICENSED",
@@ -25,8 +25,8 @@
     "vite": "^7.1.12"
   },
   "devDependencies": {
-    "@types/node": "^24.10.0",
+    "@types/node": "^25.0.2",
     "typescript": "^5.9.3",
-    "vite": "^7.1.12"
+    "vite": "^7.3.0"
   }
 }

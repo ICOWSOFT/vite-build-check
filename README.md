@@ -4,12 +4,12 @@ Avoid PWA stupid cache/404/blank page problem...
 Generate and inject a marker(timestamp) at build time, then check marker at runtime. If # => reload
 
 ## Setup
- * `npm install git+https://github.com/ICOWSOFT/vite-build-check.git -D`
+ * `npm install @icowsoft/vite-build-check -D`
 
  * `quasar.config.js` : header
 
 ```js
-import buildCheckPlugin from 'vite-build-check'
+import buildCheckPlugin from '@icowsoft/vite-build-check'
 ```
 * `quasar.config.js` : After `export`
   
@@ -26,20 +26,19 @@ import buildCheckPlugin from 'vite-build-check'
 * `quasar.config.js` : vitePlugins
 
 ```js
-[buildCheckPlugin({contextPath })],
+[buildCheckPlugin({contextPath: [contextPath], appName:[require('./package.json').name] })],
 ```
 
 * `quasar.config.js` : `pwa > extendGenerateSWOptions ` : 
 
 ```js
+        cfg.globIgnores = cfg.globIgnores || []
+        cfg.globIgnores.push('**/check.json')
         cfg.runtimeCaching = cfg.runtimeCaching || []
-
         cfg.runtimeCaching.push({
-          urlPattern: /\/check\.json$/,
+          urlPattern: new RegExp('\\/check\\.json$'),
           handler: 'NetworkOnly',
-          options: {
-            cacheName: 'no-cache-check'
-          }
+          options: { cacheName: 'no-cache-check' }
         })
 ```
 
@@ -51,6 +50,16 @@ To build :
 ```bash
 npx tsc
 ```
+
+Then push to github.
+
+## Deploy
+
+Update the package.json `version`, then
+``` bash
+npm publish
+``` 
+
 
 ## Upgrade dep
 
