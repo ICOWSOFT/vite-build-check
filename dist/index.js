@@ -20,8 +20,8 @@ export default function buildCheckPlugin(options = {}) {
           }
           // Event de retour pour reload
           window.addEventListener('message', (event) => {
-            if (event.origin && (event.data.name !== 'PwaReloadToSkeletor' || event.data.trigger !== 'reload')
-            return
+            if (event.origin && (event.data.name !== 'PwaReloadToSkeletor' || event.data.trigger !== 'reload')) {
+              return
             }
             if (!(contextPaths.length === event.data.contextPath.length && contextPaths.every((val, i) => val === event.data.contextPath[i]))) {
               return
