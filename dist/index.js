@@ -5,8 +5,8 @@ export default function buildCheckPlugin(options = {}) {
     return {
         name: 'vite-plugin-build-check',
         transformIndexHtml(html) {
-            const contextPaths = JSON.stringify(Array.isArray(options.contextPath) ? options.contextPath : [options.contextPath]);
-            const appNames = JSON.stringify(Array.isArray(options.appName) ? options.appName : [options.appName]);
+            const contextPaths = JSON.stringify(Array.isArray(options.contextPath) ? options.contextPath : (options.contextPath ? [options.contextPath] : []));
+            const appNames = JSON.stringify(Array.isArray(options.appName) ? options.appName : (options.appName ? [options.appName] : []));
             const injectScript = `
         <script>
         fetch('./check.json', { cache: 'no-store' })
