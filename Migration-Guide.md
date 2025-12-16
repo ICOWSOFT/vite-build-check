@@ -36,3 +36,13 @@ Add
         cfg.globIgnores = cfg.globIgnores || []
         cfg.globIgnores.push('**/check.json')
 ``` 
+
+Replace
+
+```js 
+        cfg.runtimeCaching.push({
+          urlPattern: new RegExp('\\/check\\.json$'),
+          handler: 'NetworkOnly',
+          options: { cacheName: 'no-cache-check' }
+        })
+``` 
