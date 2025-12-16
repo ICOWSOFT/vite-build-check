@@ -10,8 +10,8 @@ export default function buildCheckPlugin(options = {}) {
             const injectScript = `
         <script>
           const BUILD_CHECK = "${buildCheck}";
-          const contextPaths = "${contextPaths}";
-          const appNames = "${appNames}";
+          const contextPaths = ${contextPaths};
+          const appNames = ${appNames};
           fetch('./check.json', { cache: 'no-store' })
             .then(res => res.json())
             .then(data => {

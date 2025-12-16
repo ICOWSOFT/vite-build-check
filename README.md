@@ -57,6 +57,7 @@ Then push to github.
 
 Update the package.json `version`, then
 ``` bash
+npx tsc
 npm publish
 ``` 
 
@@ -66,4 +67,7 @@ npm publish
 ``` 
 npx npm-check-updates -u
 npm install
+git add .
+git commit -m"Upgrade lib"
+git push
 ```
