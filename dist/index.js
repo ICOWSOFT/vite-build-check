@@ -5,44 +5,31 @@ export default function buildCheckPlugin(options = {}) {
     return {
         name: 'vite-plugin-build-check',
         transformIndexHtml(html) {
+            const contextPaths = JSON.stringify(Array.isArray(options.contextPath) ? options.contextPath : [options.contextPath]);
+            const appNames = JSON.stringify(Array.isArray(options.appName) ? options.appName : [options.appName]);
             const injectScript = `
         <script>
-         const BUILD_CHECK = "${buildCheck}";
-fetch('./check.json', { cache: 'no-store' })
-  .then(res => res.json())
-  .then(data => {
-    if (data.check && data.check === BUILD_CHECK) {
-      return
-    }
-    // Event de retour pour reload
-    window.addEventListener('message', (event) => {
-      if (event.origin && (event.data.name !== 'PwaReloadToSkeletor' || event.data.trigger !== 'reload' || event.data.contextPath !== '${options.contextPath}')) {
-        return
-      }
-      location.reload(true);
-    })
-    // Récup du SW to unregister
-    navigator.serviceWorker.getRegistrations().then(
-      (registrations) => {
-        const ws = registrations.map(r => {
-          if (!r.scope.includes('${options.contextPath}/')) {
-            return null
-          }
-          // Sending msg popur display wait box
-          return r.update()
-        })
-        const toUpdates = ws.filter(el => el != null)
-        window.parent.postMessage({ name: 'PwaReloadToSkeletor', trigger: 'failCheck', contextPath: '${options.contextPath}', appName: '${options.appName}'})
-        return Promise.all(toUpdates)
-      },
-      (err) => {
-        throw err
-      }
-    ).then(() => {
-      console.log('UPDATED')
-    })
-  })
-  .catch(console.error);
+          const BUILD_CHECK = "${buildCheck}";
+          const contextPaths = "${contextPaths}";
+          const appNames = "${appNames}";
+          fetch('./check.json', { cache: 'no-store' })
+            .then(res => res.json())
+            .then(data => {
+              if (data.check && data.check === BUILD_CHECK) {
+                return
+              }
+              // Event de retour pour reload
+              window.addEventListener('message', (event) => {
+                if (event.origin && (event.data.name !== 'PwaReloadToSkeletor' || event.data.trigger !== 'reload' ||  !contextPaths.includes(event.data.contextPath)) {
+                  return
+                }
+                location.reload(true);
+              })
+
+              window.parent.postMessage({ name: 'PwaReloadToSkeletor', trigger: 'failCheck', contextPath: contextPaths, appName: appNames})
+                  
+            })
+            .catch(console.error);
         </script>
       `;
             return html.replace('</head>', `${injectScript}</head>`);

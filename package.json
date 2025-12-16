@@ -1,6 +1,14 @@
 {
-  "name": "vite-build-check",
-  "version": "1.0.0",
+  "name": "@icowsoft/vite-build-check",
+  "version": "2.0.0",
+  "description": "Generate a check.json file to check if the build is up to date",
+  "author": "Icowsoft",
+  "license": "UNLICENSED",
+  "private": false,
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com",
+    "access": "restricted"
+  },
   "main": "dist/index.js",
   "type": "module",
   "types": "dist/index.d.ts",
