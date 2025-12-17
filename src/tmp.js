@@ -1,36 +1,24 @@
-const BUILD_CHECK = "${buildCheck}";
 fetch('./check.json', { cache: 'no-store' })
   .then(res => res.json())
   .then(data => {
+    const BUILD_CHECK = "${buildCheck}";
+    const contextPaths = ${ contextPaths };
+    const appNames = ${ appNames };
     if (data.check && data.check === BUILD_CHECK) {
+      if (contextPaths.length > 1) {
+        window.parent.postMessage({ name: 'PwaReloadToSkeletor', trigger: 'checkOthers', contextPath: contextPaths, appName: appNames })
+      }
       return
     }
     // Event de retour pour reload
     window.addEventListener('message', (event) => {
-      if (event.origin && (event.data.name !== 'PwaReloadToSkeletor' || event.data.trigger !== 'reload' || event.data.contextPath !== '${options.contextPath}')) {
+      if (event.origin && (event.data.name !== 'PwaReloadToSkeletor' || event.data.trigger !== 'reload')) {
+        return
+      }
+      if (!(contextPaths.length === event.data.contextPath.length && contextPaths.every((val, i) => val === event.data.contextPath[i]))) {
         return
       }
       location.reload(true);
     })
-    // Récup du SW to unregister
-    navigator.serviceWorker.getRegistrations().then(
-      (registrations) => {
-        const ws = registrations.map(r => {
-          if (!r.scope.includes('${options.contextPath}/')) {
-            return null
-          }
-          // Sending msg popur display wait box
-          return r.update()
-        })
-        const toUpdates = ws.filter(el => el != null)
-        window.parent.postMessage({ name: 'PwaReloadToSkeletor', trigger: 'failCheck', contextPath: '${options.contextPath}' })
-        return Promise.all(toUpdates)
-      },
-      (err) => {
-        throw err
-      }
-    ).then(() => {
-      console.log('UPDATED')
-    })
-  })
-  .catch(console.error);
+    window.parent.postMessage({ name: 'PwaReloadToSkeletor', trigger: 'failCheck', contextPath: contextPaths, appName: appNames })
+  }).catch(console.error);
