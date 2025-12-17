@@ -17,7 +17,7 @@ export default function buildCheckPlugin(options = {}) {
             const appNames = ${appNames};
             if (data.check && data.check === BUILD_CHECK) {
               if (contextPaths.length > 1) {
-                window.parent.postMessage({ name: 'PwaReloadToSkeletor', trigger: 'checkOthers', contextPath: contextPaths, appName: appNames })
+                window.parent.postMessage({ name: 'PwaReloadToSkeletor', trigger: 'checkOthers', contextPath: contextPaths, appName: appNames, buildCheck:'${buildCheck}' })
               }
               return
             }
