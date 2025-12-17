@@ -5,6 +5,7 @@ import { join } from 'path';
 interface BuildCheckPluginOptions {
   contextPath?: string,
   appName?: string,
+  noFetch?: boolean
 }
 
 export default function buildCheckPlugin(options: BuildCheckPluginOptions = {}): Plugin {
@@ -13,6 +14,9 @@ export default function buildCheckPlugin(options: BuildCheckPluginOptions = {}):
     name: 'vite-plugin-build-check',
 
     transformIndexHtml(html) {
+      if (options.noFetch) {
+        return html
+      }
       const contextPaths = JSON.stringify(Array.isArray(options.contextPath) ? options.contextPath : (options.contextPath ? [options.contextPath] : []));
       const appNames = JSON.stringify(Array.isArray(options.appName) ? options.appName : (options.appName ? [options.appName] : []));
 
