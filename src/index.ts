@@ -15,7 +15,12 @@ export default function buildCheckPlugin(options: BuildCheckPluginOptions = {}):
 
     transformIndexHtml(html) {
       if (options.noFetch) {
-        return html
+        const injectScript = `
+            <script>
+              const BUILD_CHECK = "${buildCheck}";
+            </script>
+        `
+        return html.replace('</head>', `${injectScript}</head>`);
       }
       const contextPaths = JSON.stringify(Array.isArray(options.contextPath) ? options.contextPath : (options.contextPath ? [options.contextPath] : []));
       const appNames = JSON.stringify(Array.isArray(options.appName) ? options.appName : (options.appName ? [options.appName] : []));
