@@ -35,7 +35,9 @@ export default function buildCheckPlugin(options: BuildCheckPluginOptions = {}):
             const appNames = ${appNames};
             if (data.check && data.check === BUILD_CHECK) {
               if (contextPaths.length > 1) {
-                window.parent.postMessage({ name: 'PwaReloadToSkeletor', trigger: 'checkOthers', contextPath: contextPaths, appName: appNames, buildCheck:'${buildCheck}' })
+                setTimeout(() => {
+                  window.parent.postMessage({ name: 'PwaReloadToSkeletor', trigger: 'checkOthers', contextPath: contextPaths, appName: appNames, buildCheck:'${buildCheck}' })
+                }, 3000)
               }
               return
             }
@@ -49,7 +51,9 @@ export default function buildCheckPlugin(options: BuildCheckPluginOptions = {}):
               }
               location.reload(true);
             })
-            window.parent.postMessage({ name: 'PwaReloadToSkeletor', trigger: 'failCheck', contextPath: contextPaths, appName: appNames })
+            setTimeout(() => {
+              window.parent.postMessage({ name: 'PwaReloadToSkeletor', trigger: 'failCheck', contextPath: contextPaths, appName: appNames })
+            }, 3000)
           }).catch(console.error);
         </script>
       `;

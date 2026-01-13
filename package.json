@@ -1,6 +1,6 @@
 {
   "name": "@icowsoft/vite-build-check",
-  "version": "2.0.12",
+  "version": "2.0.13",
   "description": "Generate a check.json file to check if the build is up to date",
   "author": "Icowsoft",
   "license": "UNLICENSED",
