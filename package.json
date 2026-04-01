@@ -22,7 +22,7 @@
     "build": "tsc"
   },
   "peerDependencies": {
-    "vite": "^7.1.12"
+    "vite": "^8.0.3"
   },
   "devDependencies": {
     "@types/node": "^25.5.0",
