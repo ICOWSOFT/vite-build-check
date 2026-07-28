@@ -29,3 +29,5 @@ coverage
 *.tsbuildinfo
 
 lib
+.qwen/
+**/public/check.json
