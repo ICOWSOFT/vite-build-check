@@ -4,9 +4,15 @@ export default function buildCheckPlugin(options = {}) {
     const buildCheck = new Date().toISOString();
     return {
         name: 'vite-plugin-build-check',
+        apply: 'build',
         transformIndexHtml(html) {
             if (options.noFetch) {
-                return html;
+                const injectScript = `
+            <script>
+              const BUILD_CHECK = "${buildCheck}";
+            </script>
+        `;
+                return html.replace('</head>', `${injectScript}</head>`);
             }
             const contextPaths = JSON.stringify(Array.isArray(options.contextPath) ? options.contextPath : (options.contextPath ? [options.contextPath] : []));
             const appNames = JSON.stringify(Array.isArray(options.appName) ? options.appName : (options.appName ? [options.appName] : []));
@@ -20,7 +26,9 @@ export default function buildCheckPlugin(options = {}) {
             const appNames = ${appNames};
             if (data.check && data.check === BUILD_CHECK) {
               if (contextPaths.length > 1) {
-                window.parent.postMessage({ name: 'PwaReloadToSkeletor', trigger: 'checkOthers', contextPath: contextPaths, appName: appNames, buildCheck:'${buildCheck}' })
+                setTimeout(() => {
+                  window.parent.postMessage({ name: 'PwaReloadToSkeletor', trigger: 'checkOthers', contextPath: contextPaths, appName: appNames, buildCheck:'${buildCheck}' })
+                }, 3000)
               }
               return
             }
@@ -34,7 +42,9 @@ export default function buildCheckPlugin(options = {}) {
               }
               location.reload(true);
             })
-            window.parent.postMessage({ name: 'PwaReloadToSkeletor', trigger: 'failCheck', contextPath: contextPaths, appName: appNames })
+            setTimeout(() => {
+              window.parent.postMessage({ name: 'PwaReloadToSkeletor', trigger: 'failCheck', contextPath: contextPaths, appName: appNames })
+            }, 3000)
           }).catch(console.error);
         </script>
       `;

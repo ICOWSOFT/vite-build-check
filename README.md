@@ -3,6 +3,8 @@
 Avoid PWA stupid cache/404/blank page problem...
 Generate and inject a marker(timestamp) at build time, then check marker at runtime. If # => reload
 
+> The version check only applies to production builds: the plugin is declared with `apply: 'build'`, so in dev mode no script is injected into `index.html` and no `check.json` is written.
+
 ## Setup
  * `npm install @icowsoft/vite-build-check -D`
 

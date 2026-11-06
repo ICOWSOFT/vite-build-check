@@ -12,6 +12,7 @@ export default function buildCheckPlugin(options: BuildCheckPluginOptions = {}):
   const buildCheck = new Date().toISOString();
   return {
     name: 'vite-plugin-build-check',
+    apply: 'build',
 
     transformIndexHtml(html) {
       if (options.noFetch) {
